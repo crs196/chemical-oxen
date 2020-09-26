@@ -1,3 +1,3 @@
 # chemical-oxen
 
-**Matlab is *not* a programming lanagauge**
+**Matlab is a programming lanagauge**
