@@ -1,4 +1,4 @@
-function [ ]=Crankshaft( )
+function [ ]=CrankAngleCalcs( )
 % r = 9; % compression ratio
 % s = 8.89; % stroke (cm)
 % len= 13.335; %connecting rod length (cm)
@@ -20,7 +20,6 @@ function [ ]=Crankshaft( )
 % Gas cycle heat release code
 % engine parameters
 %clear();
-%% Variables, Constants, and Constant Calcs
 thetas=-15; % start of heat release (deg)
 thetad=40; % duration of heat release (deg)
 r=9; %compression ratio
@@ -38,8 +37,8 @@ NN=360/step; % number of data points
 % initialize the results data structure
 save.theta=zeros(NN,1); % crankangle
 save.vol=zeros(NN,1); % volume
-save.press=zeros(NN,2); % pressure
-save.work=zeros(NN,2); % work
+save.press=zeros(NN,1); % pressure
+save.work=zeros(NN,1); % work
 pinit(1) = 1; %initial dimensionless pressure P/P1
 
 j=1;
@@ -115,9 +114,8 @@ print -deps2 heatrelpressure
             yprime(2,1)= fy(1)*dvol;
         end %end of function rates
     end %end of function integrate2
-    
-%% Burn Fraction
 
+%% Burn Fraction
 theta=linspace(thetas,thetas+thetad,100); %crankangle theta vector
 dum=(theta-thetas)/thetad; % theta diference vector
 temp=-a*dum.^n;
@@ -137,19 +135,36 @@ ylabel('Burn Rate (1/deg)','fontsize', 18);
 
 %% Cylinder Volume
 len= 13.35; %connecting rod length (cm)
-ep=(s*100)/(2*len);
+ep=(s*100)/(2*len); %epsilon
 theta=-180:1:180; %crankangle theta vector
 ys1=(1-cosd(theta))/2; %approx y/s
 ys2= ys1+ (1-(1- ep^2*sind(theta).^2).^(1/2))/(2*ep); %exact y/s
-%vol1 = 1+(r-1)*ys1; %approx volume
 vol2= 1+(r-1)*ys2; % exact volume
 %plot results
 plot(theta,vol2,'-','linewidth',1);
-%plot(theta,vol1,'--',theta,vol2,'-','linewidth',1);
 set(gca,'Xlim',[-180 180],'Ylim',[0 r],'fontsize',18,'linewidth',1);
 xlabel('Crank Angle (deg)','fontsize', 18);
 ylabel('Dim. Cylinder Volume (cc)','fontsize', 18);
 legend('Exact Volume','Location', 'North');
-%legend('Approx. Volume', 'Exact Volume','Location', 'North');
+
+%% Temperature
+cv=0.718;
+T=((save.press*100).*save.vol)/(cv*(gamma-1));
+
+figure()
+plot(save.theta,T)
+xlabel('Crank Angle (deg)','fontsize', 18);
+ylabel('Temperature (K)','fontsize',18)
+
+%% Instantaneous piston speed/mean piston speed
+crankrad=4.445; %crank radius (cm) 4.445
+len=120;
+R=len/crankrad; %ratio of connecting rod length to the crank radius
+sp_msp=(pi/2)*sin(theta)*(1+((cos(theta)/sqrt((R.^2)-(sin(theta).^2))))); %instantaneoud piston speed/mean piston speed as a function of crank angle as per Heywood p.45
+
+figure()
+plot(theta,sp_msp)
+set(gca,'Xlim',[0 180],'fontsize',18,'linewidth',1);
+xlabel('Crank Angle (deg)','fontsize', 18);
 
 end % heat_release_weibe2
