@@ -115,9 +115,7 @@ print -deps2 heatrelpressure
             yprime(2,1)= fy(1)*dvol;
         end %end of function rates
     end %end of function integrate2
-%% dQ/dtheta as a function of crank angle
-%dQ=n*a*(q/thetad)*(1-b)*(theta-thetas)
-
+    
 %% Burn Fraction
 
 theta=linspace(thetas,thetas+thetad,100); %crankangle theta vector
