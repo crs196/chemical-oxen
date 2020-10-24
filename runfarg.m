@@ -2,7 +2,7 @@
 clear;
 T = 300; % enter temperature (K) input
 P = 101.; % enter pressure (kPa) input
-phi = 1; % enter equivalence ratio input
+phi = 0.765; % enter equivalence ratio input
 f=0.1111; %residual fraction input
 fuel_id = 2;
 % fuel_id - 1=Methane, 2=Gasoline, 3=Diesel, 4=Methanol, 5=Nitromethane
