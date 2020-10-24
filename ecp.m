@@ -128,7 +128,8 @@ for jj=1:MaxIter
     d14 = 0.5*c6*y5/sqy4; 
     d15 = c6*sqy4;
     % form the Jacobian matrix
-A = [ [ 1+d103, d14+d24+1+d84+d104+d94, d15+1, d26+1+d76+d96 ]; ... [ 0, 2.*d24+d94-D1*d14, -D1*d15-D1, 2*d26+2+d76+d96; ]; ...
+A = [ [ 1+d103, d14+d24+1+d84+d104+d94, d15+1, d26+1+d76+d96 ]; ... 
+    [ 0, 2.*d24+d94-D1*d14, -D1*d15-D1, 2*d26+2+d76+d96; ]; ...
     [ d103, 2*d14+d24+2+d84+d94+d104-D2*d14,2*d15+1-D2*d15-D2, d26+d96 ]; ...
     [ 2+d103, d104-D3*d14, -D3*d15-D3,0 ] ];
 if ( final )
@@ -164,7 +165,7 @@ if( nck == 0 )
     % and Jacobian matrix
     final = 1;
     continue;
-    end
+end
 end
 if (jj>=MaxIter)
     ierr = 3;
@@ -241,8 +242,7 @@ dydp(10)= d104*dydp(4) + d103*dydp(3);
 %       CO2    H2O     N2      O2     CO     H2     H     O     OH      NO
 Mi = [ 44.01, 18.02, 28.013, 32.00, 28.01, 2.016, 1.009, 16., 17.009, 30.004];
 if ( T > 1000 )
-    % high temp curve fit coefficients for thermodynamic properties ... 
-        1000 < T < 3000 %K
+    % high temp curve fit coefficients for thermodynamic properties ... 1000 < T < 3000 K
     AAC = [ ...
         [.446080e+1,.309817e-2,-.123925e-5,.227413e-9, -.155259e-13, ...
             -.489614e+5,-.986359 ];
@@ -264,8 +264,7 @@ if ( T > 1000 )
         [.3189e+1 ,.133822e-2,-.528993e-6,.959193e-10,-.648479e-14,...
             .982832e+4,.674581e+1 ]; ];
 else
-    % low temp curve fit coefficients for thermodynamic properties,...
-    300 < T <= 1000 %K 
+    % low temp curve fit coefficients for thermodynamic properties, 300 < T <= 1000 K 
     AAC = [ ...
         [ 0.24007797e+1, 0.87350957e-2, -0.66070878e-5, 0.20021861e-8, ... 
             0.63274039e-15, -0.48377527e+5, 0.96951457e+1 ]; % CO2
@@ -298,7 +297,7 @@ h = 0;
 s = 0; 
 dMWdT = 0; 
 dMWdP = 0; 
-for i=1:10 
+for i=1:10
     cpo = AAC(i,1) + AAC(i,2)*T + AAC(i,3)*T^2 + AAC(i,4)*T^3 + AAC(i,5)*T^4;
     ho = AAC(i,1) + AAC(i,2)/2*T + AAC(i,3)/3*T^2 + AAC(i,4)/4*T^3 + ... 
         AAC(i,5)/5*T^4 + AAC(i,6)/T;
@@ -391,7 +390,7 @@ for ii=1:nIterMax
             if ( abs(dox/ox) < 0.001 ) 
                 break;
             end
-        end
+end
         if( ii == nIterMax ) 
             ierr = 7;
             return; 
@@ -454,3 +453,4 @@ function [B, IERQ] = gauss( A, B )
     end
     end % gauss()
 end % ecp()
+
