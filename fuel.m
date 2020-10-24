@@ -55,4 +55,9 @@ s = ao*log(T) + bo*T +co/2*T^2 + eo;
 cp = ao + bo*T + co*T^2;
 % Calculate molecular weight of fuel
 mw = 12.01*alpha + 1.008*beta + 16.00*gamma + 14.01*delta;
+fprintf('Fuel Composition \n')
+fprintf('Carbon = \t %6.1f \n', alpha)
+fprintf('Hydrogen = \t %6.1f \n', beta)
+fprintf('Oxygen = \t %6.1f \n', gamma)
+fprintf('Nitrogen = \t %6.1f \n', delta)
 end

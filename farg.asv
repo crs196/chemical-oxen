@@ -5,8 +5,7 @@ function [Y,h,u,s,v,R,Cp,MW,dvdT,dvdP]=farg(T,P,phi,f,fuel_id)
 % T - temperature (K) [ 300 --> 1000 K ]
 % P - pressure (kPa)
 % phi - equivalence ratio = actual fuel-to-air ratio/stoichimetric
-% fuel-air ratio 
-% stoich fuel-air ratio: 14.7
+% fuel-air rati
 % f - residual fraction
 % fuel_id - 1=Methane, 2=Gasoline, 3=Diesel, 4=Methanol, 5=Nitromethane
 %
