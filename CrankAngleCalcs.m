@@ -42,7 +42,7 @@ save.work=zeros(NN,1); % work
 pinit(1) = 1; %initial dimensionless pressure P/P1
 
 j=1;
-theta = -120; %initial crankangle
+theta = -180; %initial crankangle
 thetae = theta + step; %final crankangle in step
 fy(1) = pinit(j); % assign initial pressure to working vector
 fy(2) =0.; % reset work vector
@@ -156,10 +156,13 @@ plot(save.theta,T)
 xlabel('Crank Angle (deg)','fontsize', 18);
 ylabel('Temperature (K)','fontsize',18)
 
+%% Gamma - Work in Progress
+%gamma=cp/cv=1+(r/cv);
+
 %% Instantaneous piston speed/mean piston speed
 crankrad=4.445; %crank radius (cm) 4.445
 len=13.335;
-R=len/crankrad %ratio of connecting rod length to the crank radius
+R=len/crankrad; %ratio of connecting rod length to the crank radius
 sp_msp=(pi/2)*sin(theta)*(1+((cos(theta)/sqrt((R.^2)-(sin(theta).^2))))); %instantaneoud piston speed/mean piston speed as a function of crank angle as per Heywood p.45
 
 figure()

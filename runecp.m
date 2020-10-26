@@ -1,5 +1,5 @@
 %Input-Output program for ecp.m clear;
-phi = 0.8; % enter equivalence ratio input
+phi = 0.765; % enter equivalence ratio input
 T = 3000; % enter temperature (K) input
 P = 5000.; % enter pressure (kPa) input
 fuel_id = 2;
