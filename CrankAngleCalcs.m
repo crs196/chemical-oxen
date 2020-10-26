@@ -1,28 +1,30 @@
-function [T]=CrankAngleCalcs(r,thetas,thetad,a,n,b,s,len,MW,hate,h )
+function [T]=CrankAngleCalcs(rc,re,thetas,thetad,a,n,b,stroke,len,Cp,MW,hate,h,R)
 %% Cylinder Volume v. Crank Angle
-% r = 9; % compression ratio
-% s = 8.89; % stroke (cm)
-% len= 13.335; %connecting rod length (cm)
-% ep=s/(2*len);
-% theta=-180:1:180; %crankangle theta vector
-% ys1=(1-cosd(theta))/2; %approx y/s
-% ys2= ys1+ (1-(1- ep^2*sind(theta).^2).^(1/2))/(2*ep); %exact y/s
-% vol1 = 1+(r-1)*ys1; %approx volume
-% vol2= 1+(r-1)*ys2; % exact volume
-% %plot results
-% figure(3)
-% plot(theta,vol1,'--',theta,vol2,'-','linewidth',2);
-% set(gca,'Xlim',[-180 180],'Ylim',[0 r],'fontsize',18,'linewidth',2);
-% xlabel('Crank Angle (deg)','fontsize', 18);
-% ylabel('Dim. Cylinder Volume','fontsize', 18);
-% legend('Approx. Volume', 'Exact Volume','Location', 'North');
+%re = 10; % expansion ratio
+%st = 8.89; % stroke (cm)
+%b = 8.5725; % bore (cm)
+%len= 13.335; %connecting rod length (cm)
+ep=(stroke*100)/(2*len); %episolon (change units of stroke from m to cm)
+theta=-180:1:180; %crankangle theta vector
+ys1=(1-cosd(theta))/2; %approx y/s
+ys2= ys1+ (1-(1- ep^2*sind(theta).^2).^(1/2))/(2*ep); %exact y/s
+vol1 = 1+(rc-1)*ys1; %approx volume dimm
+vol2= 1+(rc-1)*ys2; % exact volume dimm
+Vol1 = ys1*(stroke*100)*pi*((b*100)/2)^2; %approx volume (change units of bore and stroke from m to cm)
+Vol2 = ys2*(stroke*100)*pi*((b*100)/2)^2; % exact volume (change units of bore and stroke from m to cm)
+%plot results
+figure()
+plot(theta,Vol2)
+xlabel('Crank Angle (deg)','fontsize', 18);
+ylabel('Cylinder Volume (cc)','fontsize', 18)
 
 %% Pressure as a function of crank angle
 % Gas cycle heat release code
-
+thetas=-15; % start of heat release (deg)
+thetad=40; % duration of heat release (deg)
 gamma= 1.31509; %gas const
-Vd=(pi/4)*(b^2)*s; %bottom dead center
-V1=Vd/(1-(1/r));
+Vd=(pi/4)*(b^2)*stroke; %bottom dead center
+V1=Vd/(1-(1/rc));
 q= 4.8756/(148.249*V1); % dimensionless total heat release Qin/P1V1
 
 step=1; % crankangle interval for calculation/plot
@@ -56,8 +58,8 @@ end %end of pressure and work iteration loop
 thmax1=save.theta(id_max1);%crank angle
 w1=save.work(NN,1);
 eta1= w1/q; % thermal efficiency
-imep1 = eta1*q*(r/(r -1)); %imep
-eta_rat1 = eta1/(1-r^(1-gamma));
+imep1 = eta1*q*(rc/(rc -1)); %imep
+eta_rat1 = eta1/(1-rc^(1-gamma));
 % output overall results
 fprintf(' Inline-3 \n');
 fprintf(' Theta_start %5.2f \n', thetas(1,1));
@@ -94,8 +96,8 @@ print -deps2 heatrelpressure
         end
         %pressure differential equation
         function [yprime] = rates(theta,fy)
-            vol=(1.+ (r -1)/2.*(1-cosd(theta)))/r;
-            dvol=(r - 1)/2.*sind(theta)/r*pi/180.; %dvol/dtheta
+            vol=(1.+ (rc -1)/2.*(1-cosd(theta)))/rc;
+            dvol=(rc - 1)/2.*sind(theta)/rc*pi/180.; %dvol/dtheta
             dx=0.; %set heat release to zero
             if(theta > thetas) % then heat release dx > 0
                 dum1=(theta -thetas)/thetad;
@@ -129,14 +131,14 @@ ylabel('Burn Rate (1/deg)','fontsize', 18);
 
 %% Cylinder Volume
 
-ep=(s*100)/(2*len); %epsilon
+ep=(stroke*100)/(2*len); %epsilon
 theta=-180:1:180; %crankangle theta vector
 ys1=(1-cosd(theta))/2; %approx y/s
 ys2= ys1+ (1-(1- ep^2*sind(theta).^2).^(1/2))/(2*ep); %exact y/s
-vol2= 1+(r-1)*ys2; % exact volume
+vol2= 1+(rc-1)*ys2; % exact volume
 %plot results
 plot(theta,vol2,'-','linewidth',1);
-set(gca,'Xlim',[-180 180],'Ylim',[0 r],'fontsize',18,'linewidth',1);
+set(gca,'Xlim',[-180 180],'Ylim',[0 rc],'fontsize',18,'linewidth',1);
 xlabel('Crank Angle (deg)','fontsize', 18);
 ylabel('Dim. Cylinder Volume (cc)','fontsize', 18);
 legend('Exact Volume','Location', 'North');
@@ -151,11 +153,11 @@ xlabel('Crank Angle (deg)','fontsize', 18);
 ylabel('Temperature (K)','fontsize',18)
 
 %% Gamma - Work in Progress
-%gamma=cp/cv=1+(r/cv);
-Cp=0;
+%gamma=cp/cv=1+(rc/cv);
+%R=0.287; %kJ/kg K (uncomment line 156 when the code actually works)
 R = 8.31434/MW;
 Cp = R*(Cp - h*(((save.press*100).*save.vol)/(cv*(gamma-1)))*hate/MW);
-gamma=( R*(Cp - h*(((save.press*100).*save.vol)/(cv*(gamma-1)))*hate/MW))/cv;
+gamma=Cp/cv;
 Gamma=gamma';
 figure()
 plot(theta(2:end),Gamma)

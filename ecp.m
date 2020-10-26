@@ -1,4 +1,4 @@
-function [ierr,Y,h,u,s,v,R,Cp,MW,dvdT,dvdP,hate]=ecp(T,P,phi,ifuel ) 
+function [ierr,Y,h,u,s,v,R,Cp,MW,dvdT,dvdP,dMdT,dMdP]=ecp(T,P,phi,fuel_id) %ifuel
 % Subroutine for Equilibrium Combustion Products
 %
 % inputs:
@@ -73,7 +73,8 @@ if ( phi < 0.01 )
     return; 
 end
 % Get fuel composition information
-[ alpha, beta, gamma, delta ] = fuel( ifuel, T );
+%[ alpha, beta, gamma, delta ] = fuel( ifuel, T );
+[alpha,beta,gamma,delta]=fuel(fuel_id,T);
 % Equilibrium constant curve fit coefficients.
 % Valid in range: 600 K < T < 4000 K
 %          Ai            Bi           Ci           Di             Ei
@@ -307,15 +308,17 @@ for i=1:10
         MW = MW + Mi(i)*Y(i);
         dMWdT = dMWdT + Mi(i)*dydt(i); 
         dMWdP = dMWdP + Mi(i)*dydp(i);
-        Cp = Cp+Y(i)*cpo + ho*T*dydt(i)
+        Cp = Cp+Y(i)*cpo + ho*T*dydt(i);
         if (Y(i)> 1.0e-37)
             s = s + Y(i)*(so - log(Y(i))); 
         end
 end
-hate=dMWdT;        
-R = 8.31434/MW;
+dMdT=dMWdT;  
+dMdP=dMWdP;
+%R = 8.31434/MW;
+R=0.287; %kJ/kg K (uncomment line 316 when the code actually works)
 v = R*T/P;
-Cp = R*(Cp - h*T*dMWdT/MW)
+Cp = R*(Cp - h*T*dMWdT/MW);
 h = h*R*T;
 s = R*(-log(PATM) + s);
 u=h-R*T;
