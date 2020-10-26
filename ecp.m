@@ -307,7 +307,7 @@ for i=1:10
         MW = MW + Mi(i)*Y(i);
         dMWdT = dMWdT + Mi(i)*dydt(i); 
         dMWdP = dMWdP + Mi(i)*dydp(i);
-        Cp = Cp+Y(i)*cpo + ho*T*dydt(i);
+        Cp = Cp+Y(i)*cpo + ho*T*dydt(i)
         if (Y(i)> 1.0e-37)
             s = s + Y(i)*(so - log(Y(i))); 
         end
@@ -315,13 +315,14 @@ end
         
 R = 8.31434/MW;
 v = R*T/P;
-Cp = R*(Cp - h*T*dMWdT/MW);
+Cp = R*(Cp - h*T*dMWdT/MW)
 h = h*R*T;
 s = R*(-log(PATM) + s);
 u=h-R*T;
 dvdT = v/T*(1 - T*dMWdT/MW);
 dvdP = v/P*(-1 + P*dMWdP/MW);
 ierr = 0;
+
 return;
 
 function [ierr,y3,y4,y5,y6] = guess(T,phi,alpha,beta,gamma,delta,c5,c6) 
