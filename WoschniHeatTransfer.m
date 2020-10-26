@@ -109,7 +109,7 @@ function[fy,vol,ht,hflux] = integrate_ht(theta,thetae,fy)
 [tt,yy] = ode23(@rates, [theta thetae], fy);
 %put last element of yy into fy vector
 for j=1:4
-    fy(j) = yy(length(tt,j));
+    fy(j) = yy(length(tt),j);
 end
 %pressure differential equation 
 function [yprime] = rates(theta,fy)
