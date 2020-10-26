@@ -36,13 +36,13 @@ save.heatloss=zeros(NN,1); %heat loss
 save.mass=zeros(NN,1); %mass left
 save.htcoeff=zeros(NN,1); %heat transfer coeff
 save.heatflux=zeros(NN,1); %heat flux (W/m^2)
-save.massflow=zeros(NN,1); %massflow (kg-m/s)
+save.massflow=zeros(NN,1); %massflow (kg-m/s) - added
 fy = zeros(4,1); %vector for calculated pressure, work, heat and mass loss
 fy(1) = 1; %initial pressure (P/P_bdc)
 fy(4) = 1; %initial mass (-)
 %for loop for pressure and work calculations
 for i = 1:NN
-    [fy, vol, ht,hflux,m] = integrate_ht(theta,thetae,fy);
+    [fy, vol, ht,hflux] = integrate_ht(theta,thetae,fy);
     %print values
     %fprintf('%7.1f %7.2f %7.2f %7.2\n', theta,vol,fy(1),fy(2),fy(3));
     
@@ -57,7 +57,7 @@ for i = 1:NN
     save.mass(i)=fy(4);
     save.htcoeff(i)=ht;
     save.hflux(i)=hflux;
-    save.massflow(i)=m;
+    %save.massflow(i)=m; %added
 end %end of pressure and work of loop
 [pmax, id_max] = max(save.press(:,1)); %find max pressure
 thmax=save.theta(id_max); %and crank angle
@@ -125,7 +125,7 @@ P=P_bdc*fy(1); %P(theta) (kPa)
 T=T_bdc*fy(1)*vol; %T(theta) (K)
 term4=T_bdc*(r-1)*(fy(1)-vol^(-gamma))/r; %comb. vel. increase
 U=2.28*Up + 0.00324*term4; %Woschni vel (m/s)
-ht = 3.26*P^(0.8)*U(0.8)*b^(-0.2)*T(-0.55); %Woschni ht coeff
+ht = 3.26*(P^(0.8))*U*(0.8)*b^(-0.2)*T*(-0.55); %Woschni ht coeff
 hflux=ht*T_bdc*(fy(1)*vol/fy(4) - tw)/10^6; %heat flux MW/m^2
 h = ht*T_bdc*4/(1000*P_bdc*omega*beta*b); %dimensionless ht coeff
 term1 = -gamma*fy(1)*dvol/vol;
@@ -135,6 +135,7 @@ yprime(1,1)=term1 + term2 - gamma*c/omega*fy(1)*pi/180;
 yprime(2,1)=fy(1)*dvol;
 yprime(3,1)=term3;
 yprime(4,1)=-c*fy(4)/omega*pi/180;
+%mass flow 
 d = R/(P*T);
 Area = (save.vol)/s;
 m = d*U*Area; %mass flow after combusion for engine, will need compression scale for after turbo
