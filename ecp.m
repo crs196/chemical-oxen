@@ -1,4 +1,4 @@
-function [ierr,Y,h,u,s,v,R,Cp,MW,dvdT,dvdP]=ecp(T,P,phi,ifuel ) 
+function [ierr,Y,h,u,s,v,R,Cp,MW,dvdT,dvdP,hate]=ecp(T,P,phi,ifuel ) 
 % Subroutine for Equilibrium Combustion Products
 %
 % inputs:
@@ -312,7 +312,7 @@ for i=1:10
             s = s + Y(i)*(so - log(Y(i))); 
         end
 end
-        
+hate=dMWdT;        
 R = 8.31434/MW;
 v = R*T/P;
 Cp = R*(Cp - h*T*dMWdT/MW)

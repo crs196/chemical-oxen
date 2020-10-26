@@ -1,5 +1,11 @@
-function [T]=CrankAngleCalcs(r,thetas,thetad,a,n,b,s,len,MW,hate,h )
-%% Cylinder Volume v. Crank Angle
+thetas=-15; % start of heat release (deg)
+thetad=40; % duration of heat release (deg)
+r=9; %compression ratio
+a= 5; %weibe parameter a
+n= 3; %weibe exponent n
+b=.085725; %bore (m)
+s=.0889; %stroke (m)
+function [ ]=CrankAngleCalcs(r,thetas,thetad,a,n )
 % r = 9; % compression ratio
 % s = 8.89; % stroke (cm)
 % len= 13.335; %connecting rod length (cm)
@@ -19,9 +25,12 @@ function [T]=CrankAngleCalcs(r,thetas,thetad,a,n,b,s,len,MW,hate,h )
 
 %% Pressure as a function of crank angle
 % Gas cycle heat release code
+% engine parameters
+%clear();
 
 gamma= 1.31509; %gas const
-Vd=(pi/4)*(b^2)*s; %bottom dead center
+
+Vd=(pi/4)*(b^2)*s;
 V1=Vd/(1-(1/r));
 q= 4.8756/(148.249*V1); % dimensionless total heat release Qin/P1V1
 
@@ -70,7 +79,7 @@ fprintf(' Eff. Ratio %5.3f \n', eta_rat1);
 fprintf(' Imep/P1 %5.2f \n', imep1);
 
 %plot results
-figure()
+figure(1)
 plot(save.theta,save.press(:,1),'-','linewidth',1 )
 set(gca, 'fontsize', 12,'linewidth',1);
 legend('Inline-3', 'Location','NorthWest')
@@ -78,7 +87,7 @@ xlabel('Crank Angle (deg)','fontsize', 18)
 ylabel('Pressure (bar)','fontsize', 18)
 print -deps2 heatrelpressure
 
-% figure();
+% figure(2);
 % plot(save.theta,save.work(:,1),'-','linewidth',1)
 % set(gca, 'fontsize', 12,'linewidth',1);
 % legend('Inline-3','Location','NorthWest')
@@ -128,7 +137,7 @@ xlabel('Crank Angle (deg)','fontsize', 18);
 ylabel('Burn Rate (1/deg)','fontsize', 18);
 
 %% Cylinder Volume
-
+len= 13.35; %connecting rod length (cm)
 ep=(s*100)/(2*len); %epsilon
 theta=-180:1:180; %crankangle theta vector
 ys1=(1-cosd(theta))/2; %approx y/s
@@ -151,16 +160,9 @@ xlabel('Crank Angle (deg)','fontsize', 18);
 ylabel('Temperature (K)','fontsize',18)
 
 %% Gamma - Work in Progress
+
+
 %gamma=cp/cv=1+(r/cv);
-Cp=0;
-R = 8.31434/MW;
-Cp = R*(Cp - h*(((save.press*100).*save.vol)/(cv*(gamma-1)))*hate/MW);
-gamma=( R*(Cp - h*(((save.press*100).*save.vol)/(cv*(gamma-1)))*hate/MW))/cv;
-Gamma=gamma';
-figure()
-plot(theta(2:end),Gamma)
-xlabel('Crank Angle (deg)','fontsize', 18);
-ylabel('Gamma','fontsize',18)
 
 %% Instantaneous piston speed/mean piston speed
 % crankrad=4.445; %crank radius (cm) 4.445
