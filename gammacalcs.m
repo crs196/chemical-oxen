@@ -1,15 +1,23 @@
 %% lets try to run both runecp.m and runfarg.m from the same script!
-
+close all
+clear
+clc
 %Input-Output program for ecp.m clear;
 phi = 0.765; % enter equivalence ratio input
 T = 3000; % enter temperature (K) input
-P = 5000.; % enter pressure (kPa) input
-% T = 300; % enter temperature (K) input
-% P = 101.; % enter pressure (kPa) input
+P = 13000.; % enter pressure (kPa) input
+thetas=-15; % start of heat release (deg)
+thetad=40; % duration of heat release (deg)
+r=9; %compression ratio
+a= 5; %weibe parameter a
+n= 3; %weibe exponent n
+b=.085725; %bore (m)
+s=.0889; %stroke (m)
+len= 13.35; %connecting rod length (cm)
+
 fuel_id = 2;
 if T<1000
     %Input-Output program for running farg.m clear;
-    
     f=0.1111; %residual fraction input
     % fuel_id - 1=Methane, 2=Gasoline, 3=Diesel, 4=Methanol, 5=Nitromethane
     % call farg function
@@ -48,7 +56,7 @@ elseif (T>600 || T<3500) || (P>20 || P<30000)
     
     % fuel_id - 1=Methane, 2=Gasoline, 3=Diesel, 4=Methanol, 5=Nitromethane
     % call ecp function
-    [ierr, Y, h, u, s, v, R, Cp, MW, dvdT, dvdP] = ecp( T, P, phi, fuel_id );
+    [ierr, Y, h, u, s, v, R, Cp, MW, dvdT, dvdP,hate] = ecp( T, P, phi, fuel_id );
     %echo input
     fprintf(' \n Equilibrium Combustion Solver \n' );
     fprintf(' Pressure (kPa) = \t \t %6.1f \n', P );
@@ -77,3 +85,5 @@ elseif (T>600 || T<3500) || (P>20 || P<30000)
 else
     fprintf('Welp try a diff temp or pressure value \n')
 end
+%% Gamma as a function of crank angle
+[T]=CrankAngleCalcs(r,thetas,thetad,a,n,b,s,len,MW,hate,h);
