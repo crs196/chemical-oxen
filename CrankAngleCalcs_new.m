@@ -1,4 +1,4 @@
-function [T]=CrankAngleCalcs(rc,re,thetas,thetad,a,n,b,stroke,len,Cp,MW,hate,h )
+function [T]=CrankAngleCalcs_new(rc,re,thetas,thetad,a,n,b,stroke,len,Cp,MW,dMdT,h,R,dMdP,v,P)
 %% Cylinder Volume v. Crank Angle
 %re = 10; % expansion ratio
 %st = 8.89; % stroke (cm)
@@ -8,25 +8,24 @@ ep=(stroke*100)/(2*len); %episolon (change units of stroke from m to cm)
 theta=-180:1:180; %crankangle theta vector
 ys1=(1-cosd(theta))/2; %approx y/s
 ys2= ys1+ (1-(1- ep^2*sind(theta).^2).^(1/2))/(2*ep); %exact y/s
-vol1 = 1+(r-1)*ys1; %approx volume dimm
-vol2= 1+(r-1)*ys2; % exact volume dimm
-Vol1 = ys1*(stroke*100)*pi*((b*100)/2)^2; %approx volume (change units of bore and stroke from m to cm)
-Vol2 = ys2*(stroke*100)*pi*((b*100)/2)^2; % exact volume (change units of bore and stroke from m to cm)
+vol1 = 1+(rc-1)*ys1; %approx volume dimm
+vol2= 1+(rc-1)*ys2; % exact volume dimm
+Vol1 = ys1*stroke*pi*((b*100)/2)^2; %approx volume (change units of bore from m to cm)
+Vol2 = ys2*stroke*pi*((b*100)/2)^2; % exact volume (change units of bore from m to cm)
 %plot results
 figure()
 plot(theta,Vol2)
 xlabel('Crank Angle (deg)','fontsize', 18);
 ylabel('Cylinder Volume (cc)','fontsize', 18)
-
+%Vol2 = Vol2';
 %% Pressure as a function of crank angle
-% Gas cycle heat release code
+
 thetas=-15; % start of heat release (deg)
 thetad=40; % duration of heat release (deg)
 gamma= 1.31509; %gas const
-Vd=(pi/4)*(b^2)*stroke; %bottom dead center
+Vd=(pi/4)*(b^2)*stroke;
 V1=Vd/(1-(1/rc));
 q= 4.8756/(148.249*V1); % dimensionless total heat release Qin/P1V1
-
 step=1; % crankangle interval for calculation/plot
 NN=360/step; % number of data points
 
@@ -79,14 +78,12 @@ legend('Inline-3', 'Location','NorthWest')
 xlabel('Crank Angle (deg)','fontsize', 18)
 ylabel('Pressure (bar)','fontsize', 18)
 print -deps2 heatrelpressure
-
 % figure();
 % plot(save.theta,save.work(:,1),'-','linewidth',1)
 % set(gca, 'fontsize', 12,'linewidth',1);
 % legend('Inline-3','Location','NorthWest')
 % xlabel('Theta (deg)','fontsize', 18)
 % ylabel('Work','fontsize', 18)
-
     function[fy,vol] = integrate(theta,thetae,fy)
         %ode23 integration of the pressure differential equation
         %from theta to thetae with current values of fy as initial conditions
@@ -110,7 +107,6 @@ print -deps2 heatrelpressure
             yprime(2,1)= fy(1)*dvol;
         end %end of function rates
     end %end of function integrate2
-
 %% Burn Fraction
 theta=linspace(thetas,thetas+thetad,100); %crankangle theta vector
 dum=(theta-thetas)/thetad; % theta diference vector
@@ -128,9 +124,7 @@ plot(theta,dxb,'b','linewidth',1);
 set(gca, 'fontsize', 18,'linewidth',1);
 xlabel('Crank Angle (deg)','fontsize', 18);
 ylabel('Burn Rate (1/deg)','fontsize', 18);
-
 %% Cylinder Volume
-
 ep=(stroke*100)/(2*len); %epsilon
 theta=-180:1:180; %crankangle theta vector
 ys1=(1-cosd(theta))/2; %approx y/s
@@ -142,27 +136,33 @@ set(gca,'Xlim',[-180 180],'Ylim',[0 rc],'fontsize',18,'linewidth',1);
 xlabel('Crank Angle (deg)','fontsize', 18);
 ylabel('Dim. Cylinder Volume (cc)','fontsize', 18);
 legend('Exact Volume','Location', 'North');
-
 %% Temperature
 cv=0.718;
 T=((save.press*100).*save.vol)/(cv*(gamma-1));
-
 figure()
 plot(save.theta,T)
 xlabel('Crank Angle (deg)','fontsize', 18);
 ylabel('Temperature (K)','fontsize',18)
-
 %% Gamma - Work in Progress
-%gamma=cp/cv=1+(rc/cv);
+%gamma=cp/cv=1+(r/cv);
 %R=0.287; %kJ/kg K (uncomment line 156 when the code actually works)
 R = 8.31434/MW;
-%Cp = R*(Cp - h*(((save.press*100).*save.vol)/(cv*(gamma-1)))*hate/MW);
-gamma=( R*(Cp - h*(((save.press*100).*save.vol)/(cv*(gamma-1)))*hate/MW))/cv;
+Cp = R*(Cp - h*(((save.press*100).*Vol2*10^(-6))/(cv*(gamma(1,:)-1)))*dMdT/MW);
+gamma=(Cp/(Cp+(T*(((-v/T)-(v/MW)*dMdT).^2))/((-v/(save.press*100))-(v/MW)*dMdP)))+0.3827;
 Gamma=gamma';
+
 figure()
-plot(theta(2:end),Gamma)
+plot(theta(1:end-1),Gamma(1,:))
 xlabel('Crank Angle (deg)','fontsize', 18);
 ylabel('Gamma','fontsize',18)
+
+%% Temp part 2
+gam=gamma(2,:);
+T2=((save.press*100).*save.vol)./(cv*(gam-1));
+figure()
+plot(save.theta,T2)
+xlabel('Crank Angle (deg)','fontsize', 18);
+ylabel('Temperature (K)','fontsize',18)
 
 %% Instantaneous piston speed/mean piston speed
 % crankrad=4.445; %crank radius (cm) 4.445
@@ -174,5 +174,4 @@ ylabel('Gamma','fontsize',18)
 % plot(theta,sp_msp)
 % set(gca,'Xlim',[0 180],'fontsize',18,'linewidth',1);
 % xlabel('Crank Angle (deg)','fontsize', 18);
-
 end % heat_release_weibe2

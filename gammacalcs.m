@@ -1,18 +1,21 @@
 %% lets try to run both runecp.m and runfarg.m from the same script!
+% this is the run file for ecp, farg, fuel, and crankanglecalcs_new
 close all
 clear
 clc
-%Input-Output program for ecp.m clear;
+
 phi = 0.765; % enter equivalence ratio input
 T = 3000; % enter temperature (K) input
-P = 13000.; % enter pressure (kPa) input
+P = 5000.; % enter pressure (kPa) input
 thetas=-15; % start of heat release (deg)
 thetad=40; % duration of heat release (deg)
-r=9; %compression ratio
+rc=9; %compression ratio
+re=10; %expansion ratio
 a= 5; %weibe parameter a
 n= 3; %weibe exponent n
 b=.085725; %bore (m)
-s=.0889; %stroke (m)
+stroke=.0889; %stroke (m)
+st=8.89; %stroke (cm)
 len= 13.35; %connecting rod length (cm)
 
 fuel_id = 2;
@@ -51,12 +54,13 @@ if T<1000
     fprintf(' Molecular Mass = %5.2f \n', MW );
     fprintf(' dvdt = %8.2e \n', dvdT );
     fprintf(' dvdp = %8.2e \n', dvdP );
-    
+    [T]=CrankAngleCalcs_new(rc,re,thetas,thetad,a,n,b,stroke,len,Cp,MW,h,R,v,P);
+
 elseif (T>600 || T<3500) || (P>20 || P<30000)
     
     % fuel_id - 1=Methane, 2=Gasoline, 3=Diesel, 4=Methanol, 5=Nitromethane
     % call ecp function
-    [ierr, Y, h, u, s, v, R, Cp, MW, dvdT, dvdP,hate] = ecp( T, P, phi, fuel_id );
+    [ierr, Y, h, u, s, v, R, Cp, MW, dvdT, dvdP,dMdT,dMdP] = ecp( T, P, phi, fuel_id );
     %echo input
     fprintf(' \n Equilibrium Combustion Solver \n' );
     fprintf(' Pressure (kPa) = \t \t %6.1f \n', P );
@@ -82,8 +86,9 @@ elseif (T>600 || T<3500) || (P>20 || P<30000)
     fprintf(' Molecular Mass = %5.2f \n', MW );
     fprintf(' dvdt = %8.2e \n', dvdT );
     fprintf(' dvdp = %8.2e \n', dvdP );
+    [T]=CrankAngleCalcs_new(rc,re,thetas,thetad,a,n,b,stroke,len,Cp,MW,dMdT,h,R,dMdP,v,P);
 else
     fprintf('Welp try a diff temp or pressure value \n')
 end
 %% Gamma as a function of crank angle
-[T]=CrankAngleCalcs(r,thetas,thetad,a,n,b,s,len,MW,hate,h);
+%[T]=CrankAngleCalcs_jack(rc,re,thetas,thetad,a,n,b,stroke,len,Cp,MW,hate,h,R);
