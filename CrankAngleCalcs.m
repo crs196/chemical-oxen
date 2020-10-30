@@ -22,7 +22,7 @@ ylabel('Cylinder Volume (cc)','fontsize', 18)
 
 thetas=-15; % start of heat release (deg)
 thetad=40; % duration of heat release (deg)
-gamma= 1.31509; %gas const 
+gamma= 1.4; %gas const 
 Vd=(pi/4)*(b^2)*stroke;
 V1=Vd/(1-(1/rc));
 q= 4.8756/(148.249*V1); % dimensionless total heat release Qin/P1V1
@@ -182,7 +182,7 @@ ylabel('Gamma','fontsize',18)
 gamma=gamma';
 T2=((save.press*100).*save.vol)./(cv.*(gamma-1));
 figure()
-plot(save.theta,T2)
+plot(save.theta,T2,'b')
 xlabel('Crank Angle (deg)','fontsize', 18);
 ylabel('Temperature (K)','fontsize',18);
 
