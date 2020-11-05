@@ -8,21 +8,21 @@ s = 88.9; % stroke (mm)
 nc =3; % # cylinders
 pin=101; % intake manifold pressure (kPa)
 
-% everything below this line should be modified
-%%
-db = 56; % main bearing diameter (mm)
-lb = 21; % main bearing length (mm)
+
 niv = 2; % # intake valves/cyl
 nev = 2; % # exhaust valves/cyl
 div = 1.1875*25.4; % intake valve diameter (mm);
 dev= 1.1875*25.4; % exhaust valve diameter (mm);
 lv = 0.3995*25.4; % valve lift (mm)
-mu = 100.e-3 ; % dynamic viscosity (Pa s)
-pa= 101; %atmospheric pressure (kPa)
+mu = 100.e-3; % dynamic viscosity (Pa s)
 Up = 2.* N * s/60; % mean piston speed (mm/s)
+pa= 101; %atmospheric pressure (kPa)
 denom = nc*b^2*s;
 nb= nc+1; %# main crankshaft bearings
 nv = (niv+nev)*nc; % # valves (total)
+%% everything below this line should be modified
+db = 56; % main bearing diameter (mm)
+lb = 21; % main bearing length (mm)
 % friction coefficients
 c_cb=0.0202; % crankshaft bearing
 c_cs=93600; % crankshaft seals
@@ -41,6 +41,7 @@ c_1f=1.72; c_2f=0.00069; c_3f=1.2e-7; %fuel injection
 c_iv=4.12e-3; % inlet valves (kPa sˆ2/mˆ2)
 c_ev=c_iv; %exhaust valves (kPa sˆ2/mˆ2)
 c_es=0.178; % exhaust system (kPa sˆ2/mˆ2)
+
 % component fmeps
 %crankshaft
 f_cb=c_cb*nb*N.^(0.6)*db^3*lb/denom;
