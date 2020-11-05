@@ -1,4 +1,5 @@
 %%RUN THIS FILE
+%%Need cd_chart_intake, cd_chart_exhaust, and cd_chart_calc to run
 
 valve=input('Intake (1) or exhaust (2)');
 switch valve
