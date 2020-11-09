@@ -315,7 +315,6 @@ for i=1:10
 end
 
 R = 8.31434/MW;
-%R=0.287; %kJ/kg K (uncomment line 316 when the code actually works)
 v = R*T/P;
 Cp = R*(Cp - h*T*dMWdT/MW);
 h = h*R*T;
