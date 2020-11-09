@@ -7,8 +7,8 @@ clc
 phi = 0.765; % enter equivalence ratio input
 T = 3000; % enter temperature (K) input
 P = 5000.; % enter pressure (kPa) input
-thetas=-15; % start of heat release (deg)
-thetad=40; % duration of heat release (deg)
+thetas=-6; % start of heat release (deg)
+thetad=39.4; % duration of heat release (deg)
 rc=9; %compression ratio
 re=10; %expansion ratio
 a= 5; %weibe parameter a

@@ -48,11 +48,11 @@ clear
 % The pressure value is correct however the temperature values are
 % experimental
 
-% Now let's set Temp and pressure to be T and P so that we can use them in
-% later functions.
+% Now let's set Temp and press to be T and P and set units so that we can
+% use them in later functions.
 
 Temperature=Temp(:,1); % Temperature was is now 1 column and is in kelvin
-Pressure=press(:,1); % Pressure is now 1 column and is in kPa
+Pressure=press(:,1)/1000; % Pressure is now 1 column and is in kPa
 
 % Now we'll initialize the rest of our values and go into a for loop for
 % to get Cp values for all temperatures
@@ -101,30 +101,46 @@ for i=1:length(Temperature)
 end
 
 %% Plot Gamma v. Crank Angle
-%theta_plot=linspace(-180,180,length(Temperature));
+
+% Before plotting Gamma v. Crank Angle we need to smooth the data. There is
+% a jump in gamma when the program switches between running farg.m and
+% ecp.m. 
+
+gamma_plot=smooth(gamv);
+
+% With this we can now plot a smooth Gamma v. Crank Angle (deg) graph.
+
 figure()
-plot(theta_test,gamv)
+plot(theta_test,gamma_plot)
 xlabel('Crank Angle (deg)')
 ylabel('Gamma')
+title('Gamma v. Crank Angle (deg)')
 
-%
-% %% Initializing Variables
-%     % r=9; %compression ratio
-%     % re=10; %expansio ratio
-%     b=.085725; %bore (m)
-%     stroke=.0889; %stroke (m)
-%     Vd=(pi/4)*(b^2)*stroke;
-%     % V1=Vd/(1-(1/r));
-%
-% %% Volume
-%     [dim_vol]=Volume( );
-%     v_theta=dim_vol*Vd;
-%
-%     figure()
-%     plot(-180:180,v_theta)
-%     xlabel('Crank Angle (deg)')
-%     ylabel('Cylinder Volume (m^3)')
-%
+
+%% Initializing Variables
+    % r=9; %compression ratio
+    % re=10; %expansio ratio
+    b=.085725; %bore (m)
+    stroke=.0889; %stroke (m)
+    Vd=(pi/4)*(b^2)*stroke;
+    % V1=Vd/(1-(1/r));
+
+%% Volume
+    [dim_vol]=Volume( );
+    v_theta=dim_vol*Vd;
+
+    figure()
+    plot(-180:180,v_theta)
+    xlabel('Crank Angle (deg)')
+    ylabel('Cylinder Volume (m^3)')
+
+% Now that we have a variable gamma we can find more realistic temperature
+% and pressure
+
+% figure()
+% plot(theta_test2,press2)
+% xlabel('Crank Angle (deg)')
+% ylabel('More Accurate Pressure (bar)')
 % %% Temperature
 % %     N=74.25; %Number of moles in octane. from ecp and farg. this does not change
 % %     v_spec=1.423*10^-3; %ideal gas specific volume of octane
