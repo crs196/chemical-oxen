@@ -1,4 +1,4 @@
-function [ierr,Y,h,u,s,v,R,Cp,MW,dvdT,dvdP,dMdT,dMdP]=ecp(T,P,phi,fuel_id) %ifuel
+function [ierr,Y,h,u,s,v,R,Cp,MW,dvdT,dvdP]=ecp(T,P,phi,fuel_id) %ifuel
 % Subroutine for Equilibrium Combustion Products
 %
 % inputs:
@@ -313,10 +313,9 @@ for i=1:10
             s = s + Y(i)*(so - log(Y(i))); 
         end
 end
-dMdT=dMWdT;  
-dMdP=dMWdP;
-%R = 8.31434/MW;
-R=0.287; %kJ/kg K (uncomment line 316 when the code actually works)
+
+R = 8.31434/MW;
+%R=0.287; %kJ/kg K (uncomment line 316 when the code actually works)
 v = R*T/P;
 Cp = R*(Cp - h*T*dMWdT/MW);
 h = h*R*T;
@@ -325,6 +324,10 @@ u=h-R*T;
 dvdT = v/T*(1 - T*dMWdT/MW);
 dvdP = v/P*(-1 + P*dMWdP/MW);
 ierr = 0;
+%fprintf to test this
+%gam_test=Cp/(Cp+T*(dvdT^2)/dvdP);
+fprintf(' dvdT = %6.4 f \n', dvdT );
+
 
 return;
 
@@ -456,5 +459,5 @@ function [B, IERQ] = gauss( A, B )
             return;
     end
     end % gauss()
-end % ecp()
 
+end % ecp()

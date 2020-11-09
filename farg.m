@@ -44,7 +44,7 @@ A = [ [ 0.24007797e+1, 0.87350957e-2, -0.66070878e-5, 0.20021861e-8,0.63274039e-
 % CO2 H2O N2 O2 CO H2
 Mi = [ 44.01, 18.02, 28.013, 32.00, 28.01, 2.016 ];
 % Calculate stoichiometric molar air-fuel ratio
-a_s = alpha + beta/4 - gamma/2
+a_s = alpha + beta/4 - gamma/2;
 % mole fraction of fuel, O2, N2
 y_1 = 1 / (1 + 4.76*a_s/phi); % mole fraction for one mole of reactant
 y_fuel = y_1; % assuming 1 mole fuel
@@ -134,3 +134,8 @@ s = R*(-log(P/101.325)+s);
 Cp = R*Cp; % curve fit for cp is cp/r
 dvdT = v/T; % derivative of volume wrt temp
 dvdP = -v/P; % derivative of volume wrt pres
+
+%fprintf to test this
+gam_test=Cp/(Cp+T*(dvdT^2)/dvdP);
+%fprintf(' Gamma_Test = % f \n', gam_test );
+end

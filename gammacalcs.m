@@ -54,7 +54,7 @@ if T<1000
     fprintf(' Molecular Mass = %5.2f \n', MW );
     fprintf(' dvdt = %8.2e \n', dvdT );
     fprintf(' dvdp = %8.2e \n', dvdP );
-    [T]=CrankAngleCalcs_new(rc,re,thetas,thetad,a,n,b,stroke,len,Cp,MW,h,R,v,P);
+    [T]=CrankAngleCalcs(rc,re,thetas,thetad,a,n,b,stroke,len,Cp,MW,h,R,v,P);
 
 elseif (T>600 || T<3500) || (P>20 || P<30000)
     
@@ -86,7 +86,7 @@ elseif (T>600 || T<3500) || (P>20 || P<30000)
     fprintf(' Molecular Mass = %5.2f \n', MW );
     fprintf(' dvdt = %8.2e \n', dvdT );
     fprintf(' dvdp = %8.2e \n', dvdP );
-    [T]=CrankAngleCalcs_new(rc,re,thetas,thetad,a,n,b,stroke,len,Cp,MW,dMdT,h,R,dMdP,v,P);
+    [T]=CrankAngleCalcs(rc,re,thetas,thetad,a,n,b,stroke,len,Cp,MW,dMdT,h,R,dMdP,v,P);
 else
     fprintf('Welp try a diff temp or pressure value \n')
 end

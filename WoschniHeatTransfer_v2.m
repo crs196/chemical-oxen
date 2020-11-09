@@ -1,4 +1,4 @@
-function [m,m_turbo] = WoschniHeatTransfer_v2(T2,P_crank)
+function [m,m_turbo] = WoschniHeatTransfer_v2()
 % Gas cycle heat release code with Woschni Heat Transfer
 thetas = -15; %start of heat release (deg)
 thetad = 40; %duration of heat release (deg)
@@ -16,9 +16,9 @@ Vd=(pi/4)*(b^2)*s;
 V1=Vd/(1-(1/r));
 Q= 4.8756/(148.249*V1); % dimensionless total heat release Qin/P1V1
 % from initial code Q = 20; %dimensionless total heat release
-T_bdc = 300; %temp at bdc (K)
+T_bdc = 2920; %temp at bdc (K)
 tw = 1.2; %dimensionless cylinder wall temp
-P_bdc = 100; %pressure at bdc (kPa)
+P_bdc = 14052.509; %pressure at bdc (kPa)
 Up = s*omega/pi; %mean piston speed (m/s)
 %dens = R/(T_bdc*P_bdc);
 %m_bdc = dens*Up*(V1/s);

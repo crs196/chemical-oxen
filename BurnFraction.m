@@ -2,10 +2,11 @@ function [ ]=BurnFraction( )
 % this program computes and plots the cumulative burn fraction
 % and the instantanous burnrate
 clear();
+close all
 a = 5; % Weibe efficiency factor
 n = 3; % Weibe form factor
-thetas = -15; % start of combustion
-thetad = 40; % duration of combustion
+thetas = -6; % start of combustion
+thetad = 39.4; % duration of combustion
 theta=linspace(thetas,thetas+thetad,100); %crankangle theta vector
 dum=(theta-thetas)/thetad; % theta diference vector
 temp=-a*dum.^n;
