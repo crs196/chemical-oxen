@@ -323,10 +323,6 @@ u=h-R*T;
 dvdT = v/T*(1 - T*dMWdT/MW);
 dvdP = v/P*(-1 + P*dMWdP/MW);
 ierr = 0;
-%fprintf to test this
-%gam_test=Cp/(Cp+T*(dvdT^2)/dvdP);
-fprintf(' dvdT = %6.4 f \n', dvdT );
-
 
 return;
 
