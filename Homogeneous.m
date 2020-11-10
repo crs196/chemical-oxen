@@ -274,10 +274,17 @@ TB=SAVE.TB;
 TU=SAVE.TU;
 T=[TU(1:183),TB(196:360)];
 T_interpolate=interp1([-180:2,16:180],T,-180:180,'pchip');
+T_smooth=smooth(T_interpolate);
+
 
 figure()
 plot(-180:180,T_interpolate)
 xlabel('Theta')
 ylabel('T_interpolate')
+
+figure()
+plot(-180:180,T_smooth)
+xlabel('Theta')
+ylabel('T_smooth')
 
 end
