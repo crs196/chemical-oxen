@@ -52,7 +52,8 @@ clear
 % use them in later functions.
 
 Temperature=Temp(:,1); % Temperature was is now 1 column and is in kelvin
-Pressure=press(:,1)/1000; % Pressure is now 1 column and is in kPa
+%Pressure=press(:,1)/1000; % Pressure is now 1 column and is in kPa
+Pressure=press(:,1)*100;
 
 % Now we'll initialize the rest of our values and go into a for loop for
 % to get Cp values for all temperatures
