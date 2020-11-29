@@ -1,13 +1,15 @@
 % Run Homogenous.m
 % Outputs plots of eta vs rpm, T vs rpm, NOx vs rpm, grams of Nox per... 
 %   km vs rpm at 60mph
+
+% takes a while to run btw
 RPM = 1250;
 nox = zeros(25,1);
 eta = zeros(25,1);
 index = 1;
 while RPM <= 7500
     RPM = RPM + 250;
-    [ ETA, ~, NOX_ppm,~,~] = Homogeneous(RPM);
+    [ ETA, ~, NOX_ppm,~,~] = Homogeneous_range(RPM);
     nox(index) = NOX_ppm;
     eta(index) = ETA;
     index = index + 1;
@@ -17,13 +19,13 @@ nox_begin = zeros(3,1);
 eta_begin = zeros(3,1);
 
 for i = 1:3
-    [ ETA, ~, NOX_ppm,~,~] = Homogeneous(800);
+    [ ETA, ~, NOX_ppm,~,~] = Homogeneous_range(800);
     nox_begin(i) = NOX_ppm;
     eta_begin(i) = ETA;
-    [ ETA, ~, NOX_ppm,~,~] = Homogeneous(1000);
+    [ ETA, ~, NOX_ppm,~,~] = Homogeneous_range(1000);
     nox_begin(i) = NOX_ppm;
     eta_begin(i) = ETA;
-    [ ETA, ~, NOX_ppm,~,~] = Homogeneous(1124);
+    [ ETA, ~, NOX_ppm,~,~] = Homogeneous_range(1124);
     nox_begin(i) = NOX_ppm;
     eta_begin(i) = ETA;
 end
@@ -32,7 +34,7 @@ nox_end = zeros(1,1);
 eta_end = zeros(1,1);
 
 for j = 1
-    [ ETA, ~, NOX_ppm,~,~] = Homogeneous(7714);
+    [ ETA, ~, NOX_ppm,~,~] = Homogeneous_range(7714);
     nox_end(j) = NOX_ppm;
     eta_end(j) = ETA;
 end
