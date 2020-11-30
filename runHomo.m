@@ -2,7 +2,6 @@
 % Outputs plots of eta vs rpm, T vs rpm, NOx vs rpm, grams of Nox per... 
 %   km vs rpm at 60mph
 
-% takes a while to run btw
 RPM = 1250;
 nox = zeros(25,1);
 eta = zeros(25,1);
@@ -71,4 +70,24 @@ xlabel('RPM')
 figure()
 plot(rpm,emission_nox.*0.05)
 ylabel('Grams of NOx per km (60MPH) (with Catalytic Converter)')
+xlabel('RPM')
+
+emission = emission_nox./(1.9494e-3); % mass fraction of NO at density = 1.15e4 kg/m^3
+emission_co = emission.*(1.2048e-2); % mass fraction of CO at density = 1.15e4 kg/m^3
+
+co = emission_co.*1000./efficiency;
+
+figure()
+plot(rpm,co)
+ylabel('Concentration of CO (ppm)')
+xlabel('RPM')
+
+figure()
+plot(rpm,emission_co)
+ylabel('Grams of CO per km (60MPH)')
+xlabel('RPM')
+
+figure()
+plot(rpm,emission_co.*0.05)
+ylabel('Grams of CO per km (60MPH) (with Catalytic Converter)')
 xlabel('RPM')
